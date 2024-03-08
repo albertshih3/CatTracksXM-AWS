@@ -1,0 +1,534 @@
+{
+  "result": {
+    "status_overall": {
+      "updated": "2023-07-17T21:39:24.536Z",
+      "status": "Operational",
+      "status_code": 100
+    },
+    "status": [
+      {
+        "id": "60b2a2c36a05640530c4a4c8",
+        "name": "Authentication and Identity Management",
+        "status": "Operational",
+        "status_code": 100,
+        "containers": [
+          {
+            "id": "6109c2faef3c5c053b6a5b1c",
+            "name": "Duo 2FA",
+            "updated": "2023-07-13T13:00:20.838Z",
+            "status": "Operational",
+            "status_code": 100
+          },
+          {
+            "id": "6109c32db2684c099775ef6d",
+            "name": "IDM Website",
+            "updated": "2023-07-13T07:30:04.882Z",
+            "status": "Operational",
+            "status_code": 100
+          },
+          {
+            "id": "60f5ff54e62f97053594d22f",
+            "name": "SSO (Single Sign-On)",
+            "updated": "2023-07-13T13:00:20.613Z",
+            "status": "Operational",
+            "status_code": 100
+          }
+        ],
+        "updated": "2023-07-13T13:00:20.838Z"
+      },
+      {
+        "id": "60b2a3c36447e9052dcccba1",
+        "name": "Business Systems",
+        "status": "Operational",
+        "status_code": 100,
+        "containers": [
+          {
+            "id": "62e9b7ab576af0052e4655e8",
+            "name": "Banner Student Information System",
+            "updated": "2023-07-13T13:00:20.800Z",
+            "status": "Operational",
+            "status_code": 100
+          },
+          {
+            "id": "60f603f1ea25520531318a71",
+            "name": "Cognos Reports",
+            "updated": "2023-07-13T13:00:20.587Z",
+            "status": "Operational",
+            "status_code": 100
+          },
+          {
+            "id": "60f60b13b2684c099775ea93",
+            "name": "Concur",
+            "updated": "2023-07-13T13:00:20.656Z",
+            "status": "Operational",
+            "status_code": 100
+          },
+          {
+            "id": "60f602dec34053098f1c10a1",
+            "name": "Oracle Cloud Financials",
+            "updated": "2023-07-13T13:00:20.882Z",
+            "status": "Operational",
+            "status_code": 100
+          }
+        ],
+        "updated": "2023-07-13T13:00:20.882Z"
+      },
+      {
+        "id": "6142188e6fcce8052dde5288",
+        "name": "Campus Card System",
+        "status": "Operational",
+        "status_code": 100,
+        "containers": [
+          {
+            "id": "614218473b911e052e08405c",
+            "name": "CatCard",
+            "updated": "2023-07-13T13:00:20.614Z",
+            "status": "Operational",
+            "status_code": 100
+          },
+          {
+            "id": "61421870f2cbd505371f10c2",
+            "name": "Dining Payment Systems",
+            "updated": "2023-07-13T13:00:20.613Z",
+            "status": "Operational",
+            "status_code": 100
+          },
+          {
+            "id": "6142187e8c26540616a9b390",
+            "name": "Lock and Access",
+            "updated": "2023-07-13T13:00:20.693Z",
+            "status": "Operational",
+            "status_code": 100
+          }
+        ],
+        "updated": "2023-07-13T13:00:20.693Z"
+      },
+      {
+        "id": "610aa7533a4ab4053432ad19",
+        "name": "Campus Websites",
+        "status": "Operational",
+        "status_code": 100,
+        "containers": [
+          {
+            "id": "610aa72cb9ff5c09a6cfaad1",
+            "name": "Contegix Hosting (Campus & Departmental Websites)",
+            "updated": "2023-07-13T13:00:20.765Z",
+            "status": "Operational",
+            "status_code": 100
+          },
+          {
+            "id": "60f60e56b9ff5c09a6cfa4d4",
+            "name": "Faculty Websites (OpenScholar)",
+            "updated": "2023-07-13T13:00:20.839Z",
+            "status": "Operational",
+            "status_code": 100
+          }
+        ],
+        "updated": "2023-07-13T13:00:20.839Z"
+      },
+      {
+        "id": "60b2a373dc340e0537a83e0e",
+        "name": "CatCourses",
+        "status": "Operational",
+        "status_code": 100,
+        "containers": [
+          {
+            "id": "60b16163e5d993052b815118",
+            "name": "Canvas",
+            "updated": "2023-07-13T13:00:20.615Z",
+            "status": "Operational",
+            "status_code": 100
+          },
+          {
+            "id": "6109c3fafdab01052e3066c0",
+            "name": "Grading Tool",
+            "updated": "2023-07-13T13:00:20.614Z",
+            "status": "Operational",
+            "status_code": 100
+          },
+          {
+            "id": "6109c416776729052facad80",
+            "name": "Kaltura",
+            "updated": "2023-07-13T13:00:20.840Z",
+            "status": "Operational",
+            "status_code": 100
+          },
+          {
+            "id": "6109c40bb2684c099775ef6e",
+            "name": "TurnItIn",
+            "updated": "2023-07-13T13:00:20.727Z",
+            "status": "Operational",
+            "status_code": 100
+          }
+        ],
+        "updated": "2023-07-13T13:00:20.840Z"
+      },
+      {
+        "id": "6109c5e8ea25520531319028",
+        "name": "Collaboration and Sharing Services",
+        "status": "Operational",
+        "status_code": 100,
+        "containers": [
+          {
+            "id": "60f602060451310998105e8d",
+            "name": "Box",
+            "updated": "2023-07-13T13:00:20.766Z",
+            "status": "Operational",
+            "status_code": 100
+          },
+          {
+            "id": "60f6020e3cd148053e57682f",
+            "name": "CatDrive",
+            "updated": "2023-07-13T13:00:20.615Z",
+            "status": "Operational",
+            "status_code": 100
+          },
+          {
+            "id": "6109c856e62f97053594daa5",
+            "name": "Teams",
+            "updated": "2023-07-13T13:00:20.589Z",
+            "status": "Operational",
+            "status_code": 100
+          },
+          {
+            "id": "60f600fe82b746099722499c",
+            "name": "VoIP Phones",
+            "updated": "2023-07-13T13:00:20.693Z",
+            "status": "Operational",
+            "status_code": 100
+          },
+          {
+            "id": "60f6096ee62f97053594d235",
+            "name": "Zoom",
+            "updated": "2023-07-13T13:00:20.839Z",
+            "status": "Operational",
+            "status_code": 100
+          }
+        ],
+        "updated": "2023-07-13T13:00:20.839Z"
+      },
+      {
+        "id": "6109c75b776729052facad82",
+        "name": "Human Resources Services",
+        "status": "Operational",
+        "status_code": 100,
+        "containers": [
+          {
+            "id": "6109c7291c82f805369a837a",
+            "name": "HR Forms (OnBase)",
+            "updated": "2023-07-13T13:00:20.692Z",
+            "status": "Operational",
+            "status_code": 100
+          },
+          {
+            "id": "6109c719776729052facad81",
+            "name": "Saba (Performance Management)",
+            "updated": "2023-07-13T13:00:20.588Z",
+            "status": "Operational",
+            "status_code": 100
+          },
+          {
+            "id": "60f60b07776729052faca72a",
+            "name": "Time Reporting (TRS)",
+            "updated": "2023-07-13T13:00:20.655Z",
+            "status": "Operational",
+            "status_code": 100
+          },
+          {
+            "id": "61086fa2fdab01052e3065ff",
+            "name": "UCPATH",
+            "updated": "2023-07-13T13:00:20.764Z",
+            "status": "Operational",
+            "status_code": 100
+          }
+        ],
+        "updated": "2023-07-13T13:00:20.764Z"
+      },
+      {
+        "id": "6109c8bd3a4ab4053432acd8",
+        "name": "Microsoft 365",
+        "status": "Operational",
+        "status_code": 100,
+        "containers": [
+          {
+            "id": "6109c89606a1e909a2067f6a",
+            "name": "Email and Calendar",
+            "updated": "2023-07-13T13:00:20.883Z",
+            "status": "Operational",
+            "status_code": 100
+          },
+          {
+            "id": "6109c8c5fdab01052e3066c6",
+            "name": "OneDrive",
+            "updated": "2023-07-13T13:00:20.801Z",
+            "status": "Operational",
+            "status_code": 100
+          },
+          {
+            "id": "6109c856e62f97053594daa5",
+            "name": "Teams",
+            "updated": "2023-07-13T13:00:20.656Z",
+            "status": "Operational",
+            "status_code": 100
+          }
+        ],
+        "updated": "2023-07-13T13:00:20.883Z"
+      },
+      {
+        "id": "60b2a3426a05640530c4a4ca",
+        "name": "Network Services",
+        "status": "Operational",
+        "status_code": 100,
+        "containers": [
+          {
+            "id": "60f9dc863a4ab4053432a718",
+            "name": "Internet Connectivity",
+            "updated": "2023-07-14T00:04:27.689Z",
+            "status": "Operational",
+            "status_code": 100
+          },
+          {
+            "id": "60f601071c82f805369a7dd3",
+            "name": "VPN Service",
+            "updated": "2023-07-13T13:00:20.614Z",
+            "status": "Operational",
+            "status_code": 100
+          },
+          {
+            "id": "60f9dc44ef3c5c053b6a5662",
+            "name": "Wired Network",
+            "updated": "2023-07-13T13:00:20.923Z",
+            "status": "Operational",
+            "status_code": 100
+          },
+          {
+            "id": "60f9dc393cd148053e576988",
+            "name": "Wireless Network",
+            "updated": "2023-07-14T00:04:27.687Z",
+            "status": "Operational",
+            "status_code": 100
+          }
+        ],
+        "updated": "2023-07-14T00:04:27.689Z"
+      },
+      {
+        "id": "60f601383a4ab4053432a400",
+        "name": "Printing Services",
+        "status": "Operational",
+        "status_code": 100,
+        "containers": [
+          {
+            "id": "60f6011982b746099722499d",
+            "name": "PawPrint",
+            "updated": "2023-07-13T13:00:20.729Z",
+            "status": "Operational",
+            "status_code": 100
+          },
+          {
+            "id": "60f601230451310998105e8c",
+            "name": "UCMPrint",
+            "updated": "2023-07-13T13:00:20.692Z",
+            "status": "Operational",
+            "status_code": 100
+          }
+        ],
+        "updated": "2023-07-13T13:00:20.729Z"
+      },
+      {
+        "id": "60f6038082b746099722499e",
+        "name": "Student Services",
+        "status": "Operational",
+        "status_code": 100,
+        "containers": [
+          {
+            "id": "60f603945d7848099fd7ad9b",
+            "name": "MyBill",
+            "updated": "2023-07-13T13:00:20.728Z",
+            "status": "Operational",
+            "status_code": 100
+          },
+          {
+            "id": "61a67b13714e1f053880d15b",
+            "name": "MyHousing Portal",
+            "updated": "2023-07-13T13:00:20.655Z",
+            "status": "Operational",
+            "status_code": 100
+          },
+          {
+            "id": "60f601ce776729052faca727",
+            "name": "MyStudentRecord (Banner)",
+            "updated": "2023-07-13T13:00:20.884Z",
+            "status": "Operational",
+            "status_code": 100
+          },
+          {
+            "id": "6109c4473a4ab4053432acd7",
+            "name": "Registrar Forms (OnBase)",
+            "updated": "2023-07-13T13:00:20.802Z",
+            "status": "Operational",
+            "status_code": 100
+          },
+          {
+            "id": "6109c45806a1e909a2067f69",
+            "name": "Student Checklist",
+            "updated": "2023-07-13T13:00:20.727Z",
+            "status": "Operational",
+            "status_code": 100
+          }
+        ],
+        "updated": "2023-07-13T13:00:20.884Z"
+      },
+      {
+        "id": "60b16163e5d993052b815119",
+        "name": "UC Merced Connect",
+        "status": "Operational",
+        "status_code": 100,
+        "containers": [
+          {
+            "id": "60f6002c6cca1d0990504df5",
+            "name": "Connect App",
+            "updated": "2023-07-13T13:00:20.764Z",
+            "status": "Operational",
+            "status_code": 100
+          },
+          {
+            "id": "610d512efdab01052e3067a9",
+            "name": "Connect Desktop",
+            "updated": "2023-07-13T13:00:20.884Z",
+            "status": "Operational",
+            "status_code": 100
+          },
+          {
+            "id": "6109c45806a1e909a2067f69",
+            "name": "Student Checklist",
+            "updated": "2023-07-13T13:00:20.802Z",
+            "status": "Operational",
+            "status_code": 100
+          },
+          {
+            "id": "610d5141ea25520531319145",
+            "name": "Student Messages",
+            "updated": "2023-07-13T13:00:20.765Z",
+            "status": "Operational",
+            "status_code": 100
+          }
+        ],
+        "updated": "2023-07-13T13:00:20.884Z"
+      },
+      {
+        "id": "614216b1017c8705349a5a25",
+        "name": "Other Campus  & External Services",
+        "status": "Operational",
+        "status_code": 100,
+        "containers": [
+          {
+            "id": "6142162a77576f061b029664",
+            "name": "Other Campus & External Services",
+            "updated": "2023-07-13T13:00:20.657Z",
+            "status": "Operational",
+            "status_code": 100
+          }
+        ],
+        "updated": "2023-07-13T13:00:20.657Z"
+      },
+      {
+        "id": "62f2b355d07fd2052e10d12a",
+        "name": "Cyberinfrastructure & Research Technologies",
+        "status": "Operational",
+        "status_code": 100,
+        "containers": [
+          {
+            "id": "62f2b180f2a907052e1ffb09",
+            "name": "MERCED High Performance Computing Cluster",
+            "updated": "2023-07-13T13:00:20.728Z",
+            "status": "Operational",
+            "status_code": 100
+          },
+          {
+            "id": "62f2b1950f204e0534b63605",
+            "name": "Pinnacles High Performance Computing Cluster",
+            "updated": "2023-07-13T13:00:20.883Z",
+            "status": "Operational",
+            "status_code": 100
+          },
+          {
+            "id": "62f2b1a7728728052d138c36",
+            "name": "ScienceDMZ Network",
+            "updated": "2023-07-13T13:00:20.801Z",
+            "status": "Operational",
+            "status_code": 100
+          }
+        ],
+        "updated": "2023-07-13T13:00:20.883Z"
+      }
+    ],
+    "incidents": [],
+    "maintenance": {
+      "active": [],
+      "upcoming": [
+        {
+          "name": "Monthly Windows Server Patching Early Morning 7/23",
+          "_id": "64b1b1f247234c0535ca6964",
+          "datetime_open": "2023-07-14T20:37:06.779Z",
+          "datetime_planned_start": "2023-07-23T07:01:00.000Z",
+          "datetime_planned_end": "2023-07-23T13:00:00.000Z",
+          "messages": [
+            {
+              "details": "OIT will be performing our monthly Windows server patching on Sunday, 7/23 from 12:01 a.m. through approximately 6:00 a.m. \r\n\r\nDuring this period, all OIT managed Windows servers will be updated and campus users may experience up to 15 minutes of disruption for specific services such as printing or reporting as each server reboots.",
+              "state": 100,
+              "status": 200,
+              "datetime": "2023-07-14T20:37:06.826Z"
+            }
+          ],
+          "containers_affected": [
+            {
+              "name": "Other Campus & External Services",
+              "_id": "6142162a77576f061b029664"
+            }
+          ],
+          "components_affected": [
+            {
+              "name": "Other Campus  & External Services",
+              "_id": "614216b1017c8705349a5a25"
+            }
+          ]
+        },
+        {
+          "name": "Office365 Account Sync Maintenance Evening 7/20",
+          "_id": "64b5b50c6c2f36053b370d5b",
+          "datetime_open": "2023-07-17T21:39:24.408Z",
+          "datetime_planned_start": "2023-07-21T00:30:00.000Z",
+          "datetime_planned_end": "2023-07-21T01:30:00.000Z",
+          "messages": [
+            {
+              "details": "OIT will be performing maintenance on our Office365 Account Sync service on Thursday, July 20th from 5:30 pm through 6:30 pm. This maintenance effort should not have any user-facing impact.",
+              "state": 100,
+              "status": 200,
+              "datetime": "2023-07-17T21:39:24.428Z"
+            }
+          ],
+          "containers_affected": [
+            {
+              "name": "Email and Calendar",
+              "_id": "6109c89606a1e909a2067f6a"
+            },
+            {
+              "name": "OneDrive",
+              "_id": "6109c8c5fdab01052e3066c6"
+            },
+            {
+              "name": "Teams",
+              "_id": "6109c856e62f97053594daa5"
+            }
+          ],
+          "components_affected": [
+            {
+              "name": "Microsoft 365",
+              "_id": "6109c8bd3a4ab4053432acd8"
+            }
+          ]
+        }
+      ]
+    }
+  }
+}
