@@ -1,6 +1,7 @@
 const { response } = require("express");
 const { createClient } = require("@supabase/supabase-js");
 const { route } = require("express/lib/application");
+const moment = require('moment');
 
 // Supabase DB information
 const options = {
@@ -163,6 +164,7 @@ function getNextArrivalTime(routeId, stopId) {  // TODO: Weekend schedule??? Als
     let schedule = route.schedule;
     schedule.sort((a, b) => a.schedule_id - b.schedule_id); // Sort schedule by schedule_id in ascending order
     let currentDate = new Date();
+    moment(currentDate.getTime()).tz("America/Los_Angeles");
     var options = { hour12: false };    // * This line converts the current time to 24 hour format, the same as the DB
     let currentTime = currentDate.toLocaleTimeString('en-US', options);
     console.log(currentTime);
