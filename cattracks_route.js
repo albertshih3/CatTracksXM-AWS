@@ -2,6 +2,7 @@ const { response } = require("express");
 const { createClient } = require("@supabase/supabase-js");
 const { route } = require("express/lib/application");
 const cattracks = require('./cattracks.js');
+const moment = require('moment-timezone');
 
 // Supabase DB information
 const options = {
@@ -233,8 +234,8 @@ function getNextArrivalTime(routeId, stopId) {
         nextArrivalTime = (new Date('1970-01-01T' + nextStartTime).getTime());
         lastArrivalTime = (new Date('1970-01-01T' + lastStartTime).getTime());
 
-        let finalNextTime = new Date(nextArrivalTime).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
-        let finalLastTime = new Date(lastArrivalTime).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
+        let finalNextTime = new Date(nextArrivalTime).toLocaleTimeString('en-US', { timeZone: 'America/Los_Angeles' }, [], { hour: '2-digit', minute: '2-digit' });
+        let finalLastTime = new Date(lastArrivalTime).toLocaleTimeString('en-US', { timeZone: 'America/Los_Angeles' }, [], { hour: '2-digit', minute: '2-digit' });
 
         // Check if departure time has passed
         if (finalLastTime < currentTime) {
@@ -278,8 +279,8 @@ function getNextArrivalTime(routeId, stopId) {
             }
         }
 
-        let finalNextTime = new Date(nextArrivalTime).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
-        let finalLastTime = new Date(lastArrivalTime).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
+        let finalNextTime = new Date(nextArrivalTime).toLocaleTimeString('en-US', { timeZone: 'America/Los_Angeles' }, [], { hour: '2-digit', minute: '2-digit' });
+        let finalLastTime = new Date(lastArrivalTime).toLocaleTimeString('en-US', { timeZone: 'America/Los_Angeles' }, [], { hour: '2-digit', minute: '2-digit' });
 
         let finalLastTimeDate = Date.parse('1970-01-01T' + finalLastTime);
         let currentTimeDate = Date.parse('1970-01-01T' + currentTime);
@@ -401,6 +402,8 @@ function buildRouteInformation(routeId) {
 
     // Build the content page so the page looks decent
     let date = new Date();
+    console.log("DATE HERE: " + date);
+    console.log("DATE HERE 2: " + date);
     let xmContent = {
         "elementType": "responsiveTwoColumn",
         "id": "content",
@@ -462,7 +465,7 @@ function buildRouteInformation(routeId) {
         "description": "Route Details:",
         // "titleLineHeight": "0%",
         // "bylineLineHeight": "0%",
-        "byline": `Last updated: ${date.toLocaleString()}`,
+        "byline": `Last updated: ${date.toLocaleString('en-US', { timeZone: 'America/Los_Angeles' })}`,
         "responsiveVisibility": {
             "xsmall": false,
             "small": false
@@ -491,7 +494,7 @@ function buildRouteInformation(routeId) {
                 "elementType": "detail",
                 // "titleLineHeight": "0%",
                 // "bylineLineHeight": "0%",
-                "byline": `Last updated: ${date.toLocaleString()}`,
+                "byline": `Last updated: ${date.toLocaleString('en-US', { timeZone: 'America/Los_Angeles' })}`,
                 "body": route.route_description
             }
         ]

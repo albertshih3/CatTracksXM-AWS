@@ -1,5 +1,5 @@
 # serverless.yml
-service: ucmerced-cattracks-xmodule-dev
+service: ucmerced-cattracks-xmodule
 provider:
   name: aws
   runtime: nodejs16.x

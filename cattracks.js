@@ -1,8 +1,8 @@
 const { response } = require("express");
 const { createClient } = require("@supabase/supabase-js");
 const { route } = require("express/lib/application");
-const moment = require('moment');
-
+const moment = require('moment-timezone');
+// TODO: GET RID OF MOMENT TIMEZONE CODE
 // Supabase DB information
 const options = {
     auth: {
@@ -164,9 +164,8 @@ function getNextArrivalTime(routeId, stopId) {  // TODO: Weekend schedule??? Als
     let schedule = route.schedule;
     schedule.sort((a, b) => a.schedule_id - b.schedule_id); // Sort schedule by schedule_id in ascending order
     let currentDate = new Date();
-    moment(currentDate.getTime()).tz("America/Los_Angeles");
     var options = { hour12: false };    // * This line converts the current time to 24 hour format, the same as the DB
-    let currentTime = currentDate.toLocaleTimeString('en-US', options);
+    let currentTime = currentDate.toLocaleTimeString('en-US', { timeZone: 'America/Los_Angeles' }, options);
     console.log(currentTime);
     let scheduleId = null;
     let scheduleNum = 0;
@@ -219,7 +218,9 @@ function getNextArrivalTime(routeId, stopId) {  // TODO: Weekend schedule??? Als
         lastStartTime = schedule[scheduleNum - 1].start_time;
         console.log(`Last start time: ${lastStartTime}`)
         let lastStartTimeDate = new Date('1970-01-01T' + lastStartTime);
+        // moment(lastStartTime.getTime()).tz("America/Los_Angeles");
         let currentTimeDate = new Date('1970-01-01T' + currentTime);
+        // moment(currentTimeDate.getTime()).tz("America/Los_Angeles");
         if (currentTimeDate - lastStartTimeDate <= totalTime) {
             nextArrivalTime = lastStartTimeDate.getTime();
             console.log(`Next start time: ${nextStartTime}`)
@@ -234,10 +235,14 @@ function getNextArrivalTime(routeId, stopId) {  // TODO: Weekend schedule??? Als
 
     if (stopNumber == 1) {  // If is first stop, set as schedule start time
         nextArrivalTime = (new Date('1970-01-01T' + nextStartTime).getTime());
+        // moment(nextArrivalTime.getTime()).tz("America/Los_Angeles");
         lastArrivalTime = (new Date('1970-01-01T' + lastStartTime).getTime());
+        // moment(lastArrivalTime.getTime()).tz("America/Los_Angeles");
 
-        let finalNextTime = new Date(nextArrivalTime).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
-        let finalLastTime = new Date(lastArrivalTime).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
+        let finalNextTime = new Date(nextArrivalTime).toLocaleTimeString('en-US', { timeZone: 'America/Los_Angeles' }, [], { hour: '2-digit', minute: '2-digit' });
+        // moment(finalNextTime.getTime()).tz("America/Los_Angeles");
+        let finalLastTime = new Date(lastArrivalTime).toLocaleTimeString('en-US', { timeZone: 'America/Los_Angeles' }, [], { hour: '2-digit', minute: '2-digit' });
+        // moment(finalLastTime.getTime()).tz("America/Los_Angeles");
 
         // Check if departure time has passed
         if (finalLastTime < currentTime) {
@@ -249,7 +254,9 @@ function getNextArrivalTime(routeId, stopId) {  // TODO: Weekend schedule??? Als
     } else {
 
         nextArrivalTime = (new Date('1970-01-01T' + nextStartTime).getTime())  // sets the next arrival time to the start time
+        // moment(nextArrivalTime.getTime()).tz("America/Los_Angeles");
         lastArrivalTime = (new Date('1970-01-01T' + lastStartTime).getTime())
+        // moment(lastArrivalTime.getTime()).tz("America/Los_Angeles");
 
         for (let i = 0; i < schedule.length; i++) {
             if (schedule[i].schedule_id == scheduleId) {
@@ -281,8 +288,10 @@ function getNextArrivalTime(routeId, stopId) {  // TODO: Weekend schedule??? Als
             }
         }
 
-        let finalNextTime = new Date(nextArrivalTime).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
-        let finalLastTime = new Date(lastArrivalTime).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
+        let finalNextTime = new Date(nextArrivalTime).toLocaleTimeString('en-US', { timeZone: 'America/Los_Angeles' }, [], { hour: '2-digit', minute: '2-digit' });
+        // moment(finalNextTime.getTime()).tz("America/Los_Angeles");
+        let finalLastTime = new Date(lastArrivalTime).toLocaleTimeString('en-US', { timeZone: 'America/Los_Angeles' }, [], { hour: '2-digit', minute: '2-digit' });
+        // moment(finalLastTime.getTime()).tz("America/Los_Angeles");
 
         let finalLastTimeDate = Date.parse('1970-01-01T' + finalLastTime);
         let currentTimeDate = Date.parse('1970-01-01T' + currentTime);
