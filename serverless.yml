@@ -1,3 +1,7 @@
+# "org" ensures this Service is used with the correct Serverless Framework Access Key.
+org: albertshih
+# "app" enables Serverless Framework Dashboard features and sharing them with other Services.
+app: uc-merced-cattracks-xm
 # serverless.yml
 service: my-express-application
 provider:

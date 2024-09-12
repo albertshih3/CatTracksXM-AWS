@@ -5,6 +5,7 @@ const bodyParser = require('body-parser');
 const status = require('./status.js');
 const incidents = require('./incidents.js');
 const cattracks = require('./cattracks.js');
+const cattracksfull = require('./cattracksfull.js');
 const cattracks_route = require('./cattracks_route.js');
 const routeplanner = require('./routeplanner.js');
 
@@ -55,6 +56,17 @@ app.get('/cattracks', async function (req, res) {
     res.json(cattracks.buildHome(req.query));
     console.log("ALL DONE! 🎉")
 })
+
+app.get('/cattracksfull', async function (req, res) {
+    await cattracksfull.getRouteData();
+    await cattracksfull.getSchedule();
+    await cattracksfull.getStops();
+    console.log(req.headers);
+    console.log(req.query);
+    res.json(cattracksfull.buildHome(req.query));
+    console.log("ALL DONE! 🎉")
+})
+
 
 app.post('/cattracks/routeplanner', async function (req, res) {
     console.log(req.headers);

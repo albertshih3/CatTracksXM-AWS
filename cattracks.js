@@ -302,7 +302,7 @@ function getCards(selectInitialStop) {
     let xmCards = []
 
     for (let i = 0; i < routes.length; i++) {
-        let temp = "Click to see full route information.";
+        let temp = "Select a stop to view next arrival time.";
 
         for (let j = 0; j < routes[i].stops.length; j++) {
             if (selectInitialStop == null || selectInitialStop == 'none' || selectInitialStop == routes[i].stops[j].stop_id.toString()) {
@@ -362,44 +362,6 @@ function buildHome(queryStringParameters) {
         "content": [],
         "elementFields": {}
     }
-
-    let xmHeader = {
-        "elementType": "hero",
-        "height": "fluid",
-        "contentContainerWidth": "wide",
-        "backgroundImage": {
-            "cropStyle": "fill",
-            "cropVerticalPosition": "center",
-            "cropHorizontalPosition": "left",
-            "overlayType": "gradient",
-            "overlayGradientStartColor": "rgba(0,40,86,0.95)",
-            "overlayGradientAngle": 90,
-            "url": "https://taps.ucmerced.edu/sites/taps.ucmerced.edu/files/documents/cattracks_photo_utc_2_2_22.jpg"
-        },
-        "content": [
-            {
-                "elementType": "heroHeading",
-                "responsiveScaling": true,
-                "heading": `Transporation & Parking Services`,
-                "fontSize": "xsmall",
-                "textColor": "rgba(220,245,255,0.75)",
-                "textAlignment": "left",
-                "marginTop": "15%",
-                "marginBottom": "0%",
-            },
-            {
-                "elementType": "heroHeading",
-                "responsiveScaling": true,
-                "heading": `CatTracks`,
-                "fontSize": "large",
-                "textColor": "#ffffff",
-                "textAlignment": "left",
-                "marginTop": "0%",
-                "marginBottom": "xloose",
-            }
-        ]
-    }
-    xmJson.header.push(xmHeader);
 
     // Build the content page so the page looks decent
     let xmContent = {
@@ -583,10 +545,9 @@ function buildHome(queryStringParameters) {
         xmContent.primaryColumn.content.push(xmFirstStopSelector);
     }
 
-    xmContent.primaryColumn.content.push(xmRouteCardSet);
-    xmContent.primaryColumn.content.push(xmRouteCardSetMobile);
-    xmContent.secondaryColumn.content.push(xmRoutePlanner);
-    xmJson.content.push(xmContent);
+    xmJson.content.push(xmFirstStopSelector);
+    xmJson.content.push(xmRouteCardSet);
+    xmJson.content.push(xmRouteCardSetMobile);
 
     console.log(xmContent.primaryColumn);
 
