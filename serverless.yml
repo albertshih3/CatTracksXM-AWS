@@ -6,7 +6,7 @@ app: uc-merced-cattracks-xm
 service: my-express-application
 provider:
   name: aws
-  runtime: nodejs16.x
+  runtime: nodejs18.x
   region: us-west-2
   environment:
     uiExamplesToken: Basic bW9kb3NlcnZpY2U6Z2hwX3lFeE84MEZHNzZUUndtRm1KY1RBOXZjUHRXRkVoRTAzdHJrNg==

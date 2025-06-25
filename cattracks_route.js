@@ -1,15 +1,9 @@
 const { response } = require("express");
-const { createClient } = require("@supabase/supabase-js");
 const { route } = require("express/lib/application");
 const cattracks = require('./cattracks.js');
-
-// Supabase DB information
-const options = {
-    auth: {
-        persistSession: false
-    }
-};
-const supabase = createClient('https://mivdsabwktxmijnchtin.supabase.co', 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Im1pdmRzYWJ3a3R4bWlqbmNodGluIiwicm9sZSI6ImFub24iLCJpYXQiOjE2ODk4MTkxNjIsImV4cCI6MjAwNTM5NTE2Mn0.9CsS0ylsSXE8nkKJSAg-vIjXZSherXOLPfg31xrykBs', options);
+const cattracksfull = require('./cattracksfull.js');
+const moment = require('moment-timezone');
+const dataAdapter = require('./dataAdapter');
 
 // Set Variables
 let scheduleData = null;    // Holds schedule data
@@ -18,66 +12,31 @@ let stopData = null;    // Holds stop data
 let arivTime = null;    // Holds arrival time
 
 // Pull bus schedule and route information
-async function getSchedule() {
-    let { data, error } = await supabase
-        .from("schedules")
-        .select(`
-            schedule_id,
-            start_time,
-            weekend,
-            is_break,
-            break_min,
-            routes!schedules_route_id_fkey (
-                route_id,
-                route_name
-            )
-        `)
-
-    if (data) {
+function getSchedule() {
+    try {
+        scheduleData = dataAdapter.getSchedules();
         console.log("Successfully pulled schedule data");
-        scheduleData = data;
-    } else if (error) {
+    } catch (error) {
         console.log(error);
         scheduleData = null;
     }
 };
 
-async function getRouteData() {
-    let { data, error } = await supabase
-        .from("route_details")
-        .select(`
-            route_id,
-            route_name,
-            stop_number,
-            leg_minutes,
-            stops (
-                stop_id,
-                stop_name,
-                stop_description
-            ),
-            routes!route_details_route_id_fkey (
-                route_description
-            )
-        `)
-
-    if (data) {
+function getRouteData() {
+    try {
+        routeData = dataAdapter.getRouteDetails();
         console.log("Successfully pulled route data!");
-        routeData = data;
-    } else if (error) {
+    } catch (error) {
         console.log(error);
         routeData = null;
     }
 };
 
-async function getStops() {
-    let { data, error } = await supabase
-        .from("stops")
-        .select()
-
-    if (data) {
+function getStops() {
+    try {
+        stopData = dataAdapter.getStops();
         console.log("Successfully pulled stop data!");
-        stopData = data;
-    } else if (error) {
+    } catch (error) {
         console.log(error);
         stopData = null;
     }
@@ -140,182 +99,50 @@ function parseData() {
 }
 
 function getNextArrivalTime(routeId, stopId) {
-
-    console.log(routeId, stopId);
-
+    console.log('Getting next arrival for route', routeId, 'stop', stopId);
+    
+    // Find the route in our parsed data
     let route = routes.find(route => route.route_id == routeId);
-    if (route === undefined) {
+    if (!route) {
         console.log("Route not found");
-        return;
+        return "N/A";
     }
-
-    let stopNumber = null;
-    let legMinutes = 0;
-
-    for (let i = 0; i < route.stops.length; i++) {
-        if (route.stops[i].stop_id == stopId) {
-            stopNumber = route.stops[i].stop_number;
-            break;
-        }
+    
+    // Find the stop name from the stop ID
+    let targetStop = route.stops.find(stop => stop.stop_id == stopId);
+    if (!targetStop) {
+        console.log("Stop not found in route");
+        return "N/A";
     }
-
-    let schedule = route.schedule;
-    schedule.sort((a, b) => a.schedule_id - b.schedule_id); // Sort schedule by schedule_id in ascending order
-    let currentDate = new Date();
-    var options = { hour12: false };    // * This line converts the current time to 24 hour format, the same as the DB
-    let currentTime = currentDate.toLocaleTimeString('en-US', options);
-    console.log(currentTime);
-    let scheduleId = null;
-    let scheduleNum = 0;
-
-    let nextStartTime = null;
-    let nextArrivalTime = null;
-
-    let lastStartTime = null;
-    let lastArrivalTime = null;
-
-    let isFirstSchedule = false;
-    let isBreak = false;
-    let isLastScheduleBreak = false;
-
-    // Loop through the schdedule to find the next arrival time based on selected initial stop
-    for (let i = 0; i < schedule.length; i++) {
-        let startTime = (schedule[i].start_time);
-        console.log(`Start time: ${startTime}`)
-        if ((currentTime < startTime) && (nextStartTime == null || startTime < nextStartTime)) {
-            nextStartTime = startTime;
-            scheduleNum = i;
-            scheduleId = (schedule[i].schedule_id);
-        }
-        console.log(`Next start time: ${nextStartTime}`)
-    }
-
-    if (nextStartTime == null) {
-        nextStartTime = schedule[0].start_time;
-        scheduleId = schedule[0].schedule_id;
-        scheduleNum = 0;
-    }
-
-    // Calculate total time of schedule
-    let totalTime = 0;
-    for (let i = 0; i < route.stops.length; i++) {
-        totalTime += route.stops[i].leg_minutes * 60000;
-        for (let k = 0; k < schedule.length; k++) {
-            if (schedule[k].is_break && route.stops[i].stop_id == 6 && schedule[k].is_break != null) {
-                totalTime += schedule[k].break_min * 60000;
-            }
-        }
-    }
-
-    // Check if last start time was within total time of schedule
-    if (nextStartTime == schedule[0].start_time) {
-        isFirstSchedule = true;
-    }
-
-    if (!isFirstSchedule) {
-        lastStartTime = schedule[scheduleNum - 1].start_time;
-        console.log(`Last start time: ${lastStartTime}`)
-        let lastStartTimeDate = new Date('1970-01-01T' + lastStartTime);
-        let currentTimeDate = new Date('1970-01-01T' + currentTime);
-        if (currentTimeDate - lastStartTimeDate <= totalTime) {
-            nextArrivalTime = lastStartTimeDate.getTime();
-            console.log(`Next start time: ${nextStartTime}`)
-            //scheduleId = scheduleId - 1;
-        }
-    } else {
-        lastStartTime = schedule[0].start_time;
-        // scheduleId = scheduleId - 1;
-    }
-
-    // Loop through the stops to find the next arrival time based on selected initial stop
-
-    if (stopNumber == 1) {  // If is first stop, set as schedule start time
-        nextArrivalTime = (new Date('1970-01-01T' + nextStartTime).getTime());
-        lastArrivalTime = (new Date('1970-01-01T' + lastStartTime).getTime());
-
-        let finalNextTime = new Date(nextArrivalTime).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
-        let finalLastTime = new Date(lastArrivalTime).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
-
-        // Check if departure time has passed
-        if (finalLastTime < currentTime) {
-            return finalNextTime;
-        } else {
-            return finalLastTime;
-        }
-
-    } else {
-
-        nextArrivalTime = (new Date('1970-01-01T' + nextStartTime).getTime())  // sets the next arrival time to the start time
-        lastArrivalTime = (new Date('1970-01-01T' + lastStartTime).getTime())
-
-        for (let i = 0; i < schedule.length; i++) {
-            if (schedule[i].schedule_id == scheduleId) {
-                isBreak = schedule[i].is_break;
-                if (schedule[i - 1] != undefined) {
-                    isLastScheduleBreak = schedule[i - 1].is_break;
-                }
-            }
-        }
-
-        for (let i = 0; i < route.stops.length; i++) {
-            if (route.stops[i].stop_id == stopId) {
-                for (let j = 0; j < i; j++) {
-
-                    nextArrivalTime += route.stops[j].leg_minutes * 60000;
-                    lastArrivalTime += route.stops[j].leg_minutes * 60000;
-
-                    // Check for break and add break time to previous stop
-                    //console.log(isBreak, route.stops[j].stop_id)
-                    if (isBreak == true && route.stops[j + 1].stop_id == 6 && isBreak != null) {
-                        nextArrivalTime += schedule[scheduleNum].break_min * 60000;
-                        //lastArrivalTime += schedule[scheduleNum].break_min * 60000;
-                    }
-
-                    if (isLastScheduleBreak == true && route.stops[j + 1].stop_id == 6 && isLastScheduleBreak != null) {
-                        lastArrivalTime += schedule[scheduleNum - 1].break_min * 60000;
-                    }
-                }
-            }
-        }
-
-        let finalNextTime = new Date(nextArrivalTime).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
-        let finalLastTime = new Date(lastArrivalTime).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
-
-        let finalLastTimeDate = Date.parse('1970-01-01T' + finalLastTime);
-        let currentTimeDate = Date.parse('1970-01-01T' + currentTime);
-
-        console.log(lastArrivalTime, currentTimeDate);
-        console.log(lastArrivalTime < currentTimeDate);
-        if (lastArrivalTime < currentTimeDate) {
-            return finalNextTime;
-        } else {
-            return finalLastTime;
-        }
+    
+    // Use dataAdapter to get the next arrival time directly from JSON
+    try {
+        const nextTime = dataAdapter.getNextArrival(route.route_name, targetStop.stop_name);
+        return nextTime || "N/A";
+    } catch (error) {
+        console.error('Error getting next arrival:', error);
+        return "N/A";
     }
 }
 
 function getTimeDifferenceInMinutes(arivTime) {
-    // Get the current time
-    let currentTime = new Date();
+    if (!arivTime || arivTime === "N/A") {
+        return -1;
+    }
+    
+    // Get the current time in Pacific timezone
+    let currentTime = moment().tz('America/Los_Angeles');
 
-    // Parse the arrival time string
-    let [arivTimeHours, arivTimeMinutes] = arivTime.split(' ')[0].split(':');
-    let arivTimePeriod = arivTime.split(' ')[1];
-
-    // Convert the arrival time hours to 24-hour format
-    if (arivTimePeriod === 'PM' && arivTimeHours !== '12') {
-        arivTimeHours = parseInt(arivTimeHours) + 12;
-    } else if (arivTimePeriod === 'AM' && arivTimeHours === '12') {
-        arivTimeHours = '00';
+    // Create arrival time moment in Pacific timezone
+    let arrivalTime = moment.tz(arivTime, 'HH:mm', 'America/Los_Angeles');
+    
+    // If arrival time is earlier than current time, assume it's tomorrow
+    if (arrivalTime.isBefore(currentTime)) {
+        arrivalTime.add(1, 'day');
     }
 
-    // Create a Date object for the arrival time
-    let arrivalTime = new Date();
-    arrivalTime.setHours(arivTimeHours);
-    arrivalTime.setMinutes(arivTimeMinutes);
-
     // Calculate the difference in minutes
-    let differenceInMinutes = (arrivalTime - currentTime) / 1000 / 60;
+    let differenceInMinutes = arrivalTime.diff(currentTime, 'minutes');
 
     return differenceInMinutes;
 }
@@ -323,7 +150,11 @@ function getTimeDifferenceInMinutes(arivTime) {
 // Parse through returned data and rework variables to be stored in a readable manner
 
 function buildRouteInformation(routeId) {
-
+    // Load data first
+    getSchedule();
+    getRouteData();
+    getStops();
+    
     parseData();
 
     let route = null;
@@ -367,14 +198,14 @@ function buildRouteInformation(routeId) {
                         "elementType": "breadcrumbItem",
                         "title": "Cattracks Homepage",
                         "url": {
-                            "relativePath": "./cattracks"
+                            "relativePath": "./cattracksfull"
                         }
                     },
                     {
                         "elementType": "breadcrumbItem",
                         "title": "Routes",
                         "url": {
-                            "relativePath": "./cattracks"
+                            "relativePath": "./cattracksfull"
                         }
                     },
                     {
@@ -462,7 +293,7 @@ function buildRouteInformation(routeId) {
         "description": "Route Details:",
         // "titleLineHeight": "0%",
         // "bylineLineHeight": "0%",
-        "byline": `Last updated: ${date.toLocaleString()}`,
+        "byline": `Last updated: ${date.toLocaleString('en-US', { timeZone: 'America/Los_Angeles' })}`,
         "responsiveVisibility": {
             "xsmall": false,
             "small": false
@@ -491,7 +322,7 @@ function buildRouteInformation(routeId) {
                 "elementType": "detail",
                 // "titleLineHeight": "0%",
                 // "bylineLineHeight": "0%",
-                "byline": `Last updated: ${date.toLocaleString()}`,
+                "byline": `Last updated: ${date.toLocaleString('en-US', { timeZone: 'America/Los_Angeles' })}`,
                 "body": route.route_description
             }
         ]

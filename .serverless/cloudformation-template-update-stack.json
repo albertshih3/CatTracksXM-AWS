@@ -2,75 +2,6 @@
   "AWSTemplateFormatVersion": "2010-09-09",
   "Description": "The AWS CloudFormation template for this Serverless application",
   "Resources": {
-    "ServerlessDeploymentBucket": {
-      "Type": "AWS::S3::Bucket",
-      "Properties": {
-        "BucketEncryption": {
-          "ServerSideEncryptionConfiguration": [
-            {
-              "ServerSideEncryptionByDefault": {
-                "SSEAlgorithm": "AES256"
-              }
-            }
-          ]
-        }
-      }
-    },
-    "ServerlessDeploymentBucketPolicy": {
-      "Type": "AWS::S3::BucketPolicy",
-      "Properties": {
-        "Bucket": {
-          "Ref": "ServerlessDeploymentBucket"
-        },
-        "PolicyDocument": {
-          "Statement": [
-            {
-              "Action": "s3:*",
-              "Effect": "Deny",
-              "Principal": "*",
-              "Resource": [
-                {
-                  "Fn::Join": [
-                    "",
-                    [
-                      "arn:",
-                      {
-                        "Ref": "AWS::Partition"
-                      },
-                      ":s3:::",
-                      {
-                        "Ref": "ServerlessDeploymentBucket"
-                      },
-                      "/*"
-                    ]
-                  ]
-                },
-                {
-                  "Fn::Join": [
-                    "",
-                    [
-                      "arn:",
-                      {
-                        "Ref": "AWS::Partition"
-                      },
-                      ":s3:::",
-                      {
-                        "Ref": "ServerlessDeploymentBucket"
-                      }
-                    ]
-                  ]
-                }
-              ],
-              "Condition": {
-                "Bool": {
-                  "aws:SecureTransport": false
-                }
-              }
-            }
-          ]
-        }
-      }
-    },
     "AppLogGroup": {
       "Type": "AWS::Logs::LogGroup",
       "Properties": {
@@ -159,13 +90,11 @@
       "Type": "AWS::Lambda::Function",
       "Properties": {
         "Code": {
-          "S3Bucket": {
-            "Ref": "ServerlessDeploymentBucket"
-          },
-          "S3Key": "serverless/my-express-application/dev/1725570049245-2024-09-05T21:00:49.245Z/my-express-application.zip"
+          "S3Bucket": "serverless-framework-deployments-us-west-2-fa2e4006-8cb0",
+          "S3Key": "serverless/my-express-application/dev/1750889549341-2025-06-25T22:12:29.341Z/my-express-application.zip"
         },
         "Handler": "index.handler",
-        "Runtime": "nodejs16.x",
+        "Runtime": "nodejs18.x",
         "FunctionName": "my-express-application-dev-app",
         "MemorySize": 1024,
         "Timeout": 6,
@@ -185,14 +114,14 @@
         "AppLogGroup"
       ]
     },
-    "AppLambdaVersionvu5ifvuO7GdFGSGCaoUVHNHzVuAu4hoZb0LmKVbWaw": {
+    "AppLambdaVersion1WZrNKz5U6RHxZMLml3EabgS2s9dpU1XjfXL6Njg0": {
       "Type": "AWS::Lambda::Version",
       "DeletionPolicy": "Retain",
       "Properties": {
         "FunctionName": {
           "Ref": "AppLambdaFunction"
         },
-        "CodeSha256": "3+d7i3e3ZE5xIj9Z9rpSHnQX5j+tqHenvGquJLPkczo="
+        "CodeSha256": "bDl/Nvj6/JXHhmsWCDInrl5lJ1ITGiHlhF6IpQEVBNk="
       }
     },
     "ApiGatewayRestApi": {
@@ -317,7 +246,7 @@
         "AppLambdaPermissionApiGateway"
       ]
     },
-    "ApiGatewayDeployment1725570045587": {
+    "ApiGatewayDeployment1750889543575": {
       "Type": "AWS::ApiGateway::Deployment",
       "Properties": {
         "RestApiId": {
@@ -370,9 +299,7 @@
   },
   "Outputs": {
     "ServerlessDeploymentBucketName": {
-      "Value": {
-        "Ref": "ServerlessDeploymentBucket"
-      },
+      "Value": "serverless-framework-deployments-us-west-2-fa2e4006-8cb0",
       "Export": {
         "Name": "sls-my-express-application-dev-ServerlessDeploymentBucketName"
       }
@@ -380,7 +307,7 @@
     "AppLambdaFunctionQualifiedArn": {
       "Description": "Current Lambda function version",
       "Value": {
-        "Ref": "AppLambdaVersionvu5ifvuO7GdFGSGCaoUVHNHzVuAu4hoZb0LmKVbWaw"
+        "Ref": "AppLambdaVersion1WZrNKz5U6RHxZMLml3EabgS2s9dpU1XjfXL6Njg0"
       },
       "Export": {
         "Name": "sls-my-express-application-dev-AppLambdaFunctionQualifiedArn"

@@ -1,14 +1,6 @@
 const { response } = require("express");
-const { createClient } = require("@supabase/supabase-js");
 const { route } = require("express/lib/application");
-
-// Supabase DB information
-const options = {
-    auth: {
-        persistSession: false
-    }
-};
-const supabase = createClient('https://mivdsabwktxmijnchtin.supabase.co', 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Im1pdmRzYWJ3a3R4bWlqbmNodGluIiwicm9sZSI6ImFub24iLCJpYXQiOjE2ODk4MTkxNjIsImV4cCI6MjAwNTM5NTE2Mn0.9CsS0ylsSXE8nkKJSAg-vIjXZSherXOLPfg31xrykBs', options);
+const dataAdapter = require('./dataAdapter');
 
 // Set Variables
 let scheduleData = null;    // Holds schedule data
@@ -17,66 +9,31 @@ let stopData = null;    // Holds stop data
 let arivTime = null;    // Holds arrival time
 
 // Pull bus schedule and route information
-async function getSchedule() {
-    let { data, error } = await supabase
-        .from("schedules")
-        .select(`
-            schedule_id,
-            start_time,
-            weekend,
-            is_break,
-            break_min,
-            routes!schedules_route_id_fkey (
-                route_id,
-                route_name
-            )
-        `)
-
-    if (data) {
+function getSchedule() {
+    try {
+        scheduleData = dataAdapter.getSchedules();
         console.log("Successfully pulled schedule data");
-        scheduleData = data;
-    } else if (error) {
+    } catch (error) {
         console.log(error);
         scheduleData = null;
     }
 };
 
-async function getRouteData() {
-    let { data, error } = await supabase
-        .from("route_details")
-        .select(`
-            route_id,
-            route_name,
-            stop_number,
-            leg_minutes,
-            stops (
-                stop_id,
-                stop_name,
-                stop_description
-            ),
-            routes!route_details_route_id_fkey (
-                route_description
-            )
-        `)
-
-    if (data) {
+function getRouteData() {
+    try {
+        routeData = dataAdapter.getRouteDetails();
         console.log("Successfully pulled route data!");
-        routeData = data;
-    } else if (error) {
+    } catch (error) {
         console.log(error);
         routeData = null;
     }
 };
 
-async function getStops() {
-    let { data, error } = await supabase
-        .from("stops")
-        .select()
-
-    if (data) {
+function getStops() {
+    try {
+        stopData = dataAdapter.getStops();
         console.log("Successfully pulled stop data!");
-        stopData = data;
-    } else if (error) {
+    } catch (error) {
         console.log(error);
         stopData = null;
     }
@@ -163,7 +120,7 @@ function getNextArrivalTime(routeId, stopId) {  // TODO: Weekend schedule??? Als
     let schedule = route.schedule;
     schedule.sort((a, b) => a.schedule_id - b.schedule_id); // Sort schedule by schedule_id in ascending order
     let currentDate = new Date();
-    var options = { hour12: false };    // * This line converts the current time to 24 hour format, the same as the DB
+    var options = { hour12: false, timeZone: 'America/Los_Angeles' };    // * This line converts the current time to 24 hour format, the same as the DB, and uses Pacific time
     let currentTime = currentDate.toLocaleTimeString('en-US', options);
     console.log(currentTime);
     let scheduleId = null;
@@ -234,8 +191,8 @@ function getNextArrivalTime(routeId, stopId) {  // TODO: Weekend schedule??? Als
         nextArrivalTime = (new Date('1970-01-01T' + nextStartTime).getTime());
         lastArrivalTime = (new Date('1970-01-01T' + lastStartTime).getTime());
 
-        let finalNextTime = new Date(nextArrivalTime).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
-        let finalLastTime = new Date(lastArrivalTime).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
+        let finalNextTime = new Date(nextArrivalTime).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit', timeZone: 'America/Los_Angeles' });
+        let finalLastTime = new Date(lastArrivalTime).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit', timeZone: 'America/Los_Angeles' });
 
         // Check if departure time has passed
         if (finalLastTime < currentTime) {
@@ -279,8 +236,8 @@ function getNextArrivalTime(routeId, stopId) {  // TODO: Weekend schedule??? Als
             }
         }
 
-        let finalNextTime = new Date(nextArrivalTime).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
-        let finalLastTime = new Date(lastArrivalTime).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
+        let finalNextTime = new Date(nextArrivalTime).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit', timeZone: 'America/Los_Angeles' });
+        let finalLastTime = new Date(lastArrivalTime).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit', timeZone: 'America/Los_Angeles' });
 
         let finalLastTimeDate = Date.parse('1970-01-01T' + finalLastTime);
         let currentTimeDate = Date.parse('1970-01-01T' + currentTime);
@@ -348,7 +305,11 @@ function getCards(selectInitialStop) {
 }
 
 function buildHome(queryStringParameters) {
-
+    // Load data first
+    getSchedule();
+    getRouteData();
+    getStops();
+    
     parseData();
     // console.log(JSON.stringify(routes, null, 2));
 
